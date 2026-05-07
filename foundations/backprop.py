@@ -4,7 +4,7 @@ from typing import Tuple
 
 
 class Solution:
-    def sigmoid(self, x: NDArray[np.float64]) -> float:
+    def sigmoid(self, x: NDArray[np.float64]) -> NDArray[np.float64]:
         return 1 / (1+np.exp(-x))
 
     def backward(self, 
