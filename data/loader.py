@@ -15,18 +15,13 @@ class Solution:
         torch.manual_seed(0)
 
         max_start = len(data) - context_length - 1
-        start_indices = torch.randint(
-            0,
-            max_start + 1,
-            (batch_size,)
-        )
+        starts = torch.randint(0, max_start+1, (batch_size,))
+        offsets = torch.arange(context_length)
+        
+        X_idx = starts[:, None] + offsets[None, :]
+        Y_idx = X_idx + 1
 
-        X = []
-        Y = []
+        X = data[X_idx]
+        Y = data[Y_idx]
 
-        for i in start_indices:
-            i = i.item()
-            X.append(data[i : i + context_length])
-            Y.append(data[i + 1 : i + context_length + 1])
-
-        return torch.stack(X), torch.stack(Y)
+        return X, Y
