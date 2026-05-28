@@ -32,11 +32,6 @@ class CachedAttention(nn.Module):
         self.v_proj = nn.Linear(model_dim, model_dim, bias=False)
 
     def forward(self, x: torch.Tensor, kv_cache: Optional[KVCache] = None) -> Tuple[torch.Tensor, KVCache]:
-        # 1. Project x into Q, K, V using the linear layers
-        # 2. If kv_cache is None, create a new KVCache
-        # 3. Update the cache with the new K and V
-        # 4. Compute scaled dot-product attention using Q and the full cached K, V
-        # 5. Return (rounded output, kv_cache)
         Q = self.q_proj(x)
         K = self.k_proj(x)
         V = self.v_proj(x)
