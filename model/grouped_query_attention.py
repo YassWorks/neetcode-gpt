@@ -5,7 +5,6 @@ from torchtyping import TensorType
 
 
 class GroupedQueryAttention(nn.Module):
-
     def __init__(self, model_dim: int, num_heads: int, num_kv_heads: int):
         super().__init__()
         torch.manual_seed(0)
@@ -22,8 +21,16 @@ class GroupedQueryAttention(nn.Module):
         B, T, D = x.shape
 
         Q = self.q_proj(x).reshape(B, T, self.num_heads, self.head_dim).transpose(1, 2)
-        K = self.k_proj(x).reshape(B, T, self.num_kv_heads, self.head_dim).transpose(1, 2)
-        V = self.v_proj(x).reshape(B, T, self.num_kv_heads, self.head_dim).transpose(1, 2)
+        K = (
+            self.k_proj(x)
+            .reshape(B, T, self.num_kv_heads, self.head_dim)
+            .transpose(1, 2)
+        )
+        V = (
+            self.v_proj(x)
+            .reshape(B, T, self.num_kv_heads, self.head_dim)
+            .transpose(1, 2)
+        )
 
         repeat_factor = self.num_heads // self.num_kv_heads
         K = K.repeat_interleave(repeat_factor, dim=1)

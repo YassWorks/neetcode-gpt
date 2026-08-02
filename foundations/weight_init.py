@@ -4,7 +4,6 @@ import math
 
 
 class Solution:
-
     def xavier_init(self, fan_in: int, fan_out: int) -> list[list[float]]:
         torch.manual_seed(0)
         std = math.sqrt(2.0 / (fan_in + fan_out))
@@ -17,15 +16,17 @@ class Solution:
         weights = torch.randn(fan_out, fan_in) * std
         return torch.round(weights, decimals=4).tolist()
 
-    def check_activations(self, num_layers: int, input_dim: int, hidden_dim: int, init_type: str) -> list[float]:
+    def check_activations(
+        self, num_layers: int, input_dim: int, hidden_dim: int, init_type: str
+    ) -> list[float]:
         torch.manual_seed(0)
         dims = [input_dim] + [hidden_dim] * num_layers
         print(dims)
         weights = []
         for i in range(num_layers):
-            if init_type == 'xavier':
+            if init_type == "xavier":
                 std = math.sqrt(2.0 / (dims[i] + dims[i + 1]))
-            elif init_type == 'kaiming':
+            elif init_type == "kaiming":
                 std = math.sqrt(2.0 / dims[i])
             else:
                 std = 1.0

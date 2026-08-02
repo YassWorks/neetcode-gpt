@@ -2,7 +2,6 @@ from typing import Dict, List, Tuple
 
 
 class Solution:
-
     def build_vocab(self, text: str) -> Tuple[Dict[str, int], Dict[int, str]]:
         vocab = list(text)
         vocab = sorted(list(set(vocab)))
@@ -21,4 +20,4 @@ class Solution:
         result = []
         for idx in ids:
             result.append(itos[idx])
-        return ''.join(result)
+        return "".join(result)

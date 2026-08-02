@@ -8,5 +8,5 @@ class Solution:
         mean = np.mean(x, axis=0)
         var = np.var(x, axis=0)
         rms = np.sqrt(np.mean(x**2) + eps)
-        x_hat = x/rms
-        return np.round(gamma*x_hat, 4)
+        x_hat = x / rms
+        return np.round(gamma * x_hat, 4)

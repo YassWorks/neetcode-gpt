@@ -4,13 +4,14 @@ from torchtyping import TensorType
 
 
 class Solution:
-
-    def generate(self,
-                 model,
-                 new_chars: int,
-                 context: TensorType[int],
-                 context_length: int,
-                 int_to_char: dict) -> str:
+    def generate(
+        self,
+        model,
+        new_chars: int,
+        context: TensorType[int],
+        context_length: int,
+        int_to_char: dict,
+    ) -> str:
         generator = torch.manual_seed(0)
         initial_state = generator.get_state()
         output = ""

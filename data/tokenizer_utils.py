@@ -2,7 +2,6 @@ from typing import List, Dict
 
 
 class Solution:
-
     def _greedy_tokenize(self, text: str, vocab: Dict[str, int]) -> List[str]:
         tokens = []
         i = 0
@@ -22,7 +21,9 @@ class Solution:
                 i += 1
         return tokens
 
-    def tokenize_numbers(self, numbers: List[int], vocab: Dict[str, int]) -> List[List[str]]:
+    def tokenize_numbers(
+        self, numbers: List[int], vocab: Dict[str, int]
+    ) -> List[List[str]]:
         result = []
         for number in numbers:
             result.append(self._greedy_tokenize(str(number), vocab))

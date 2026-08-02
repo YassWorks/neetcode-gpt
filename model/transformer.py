@@ -4,7 +4,6 @@ from torchtyping import TensorType
 
 
 class TransformerBlock(nn.Module):
-
     def __init__(self, model_dim: int, num_heads: int):
         super().__init__()
         torch.manual_seed(0)
@@ -21,7 +20,6 @@ class TransformerBlock(nn.Module):
         return torch.round(x, decimals=4)
 
     class MultiHeadedSelfAttention(nn.Module):
-
         class SingleHeadAttention(nn.Module):
             def __init__(self, model_dim: int, head_size: int):
                 super().__init__()
@@ -35,14 +33,16 @@ class TransformerBlock(nn.Module):
                 q = self.query_gen(embedded)
                 v = self.value_gen(embedded)
 
-                scores = q @ torch.transpose(k, 1, 2) # @ is the same as torch.matmul()
+                scores = q @ torch.transpose(k, 1, 2)  # @ is the same as torch.matmul()
                 context_length, attention_dim = k.shape[1], k.shape[2]
-                scores = scores / (attention_dim ** 0.5)
+                scores = scores / (attention_dim**0.5)
 
-                lower_triangular = torch.tril(torch.ones(context_length, context_length))
+                lower_triangular = torch.tril(
+                    torch.ones(context_length, context_length)
+                )
                 mask = lower_triangular == 0
-                scores = scores.masked_fill(mask, float('-inf'))
-                scores = nn.functional.softmax(scores, dim = 2)
+                scores = scores.masked_fill(mask, float("-inf"))
+                scores = nn.functional.softmax(scores, dim=2)
 
                 return scores @ v
 
@@ -51,25 +51,26 @@ class TransformerBlock(nn.Module):
             torch.manual_seed(0)
             self.att_heads = nn.ModuleList()
             for i in range(num_heads):
-                self.att_heads.append(self.SingleHeadAttention(model_dim, model_dim // num_heads))
+                self.att_heads.append(
+                    self.SingleHeadAttention(model_dim, model_dim // num_heads)
+                )
             self.output_proj = nn.Linear(model_dim, model_dim, bias=False)
 
         def forward(self, embedded: TensorType[float]) -> TensorType[float]:
             head_outputs = []
             for head in self.att_heads:
                 head_outputs.append(head(embedded))
-            concatenated = torch.cat(head_outputs, dim = 2)
+            concatenated = torch.cat(head_outputs, dim=2)
             return self.output_proj(concatenated)
 
     class VanillaNeuralNetwork(nn.Module):
-
         def __init__(self, model_dim: int):
             super().__init__()
             torch.manual_seed(0)
             self.up_projection = nn.Linear(model_dim, model_dim * 4)
             self.relu = nn.ReLU()
             self.down_projection = nn.Linear(model_dim * 4, model_dim)
-            self.dropout = nn.Dropout(0.2) # using p = 0.2
+            self.dropout = nn.Dropout(0.2)  # using p = 0.2
 
         def forward(self, x: TensorType[float]) -> TensorType[float]:
             torch.manual_seed(0)

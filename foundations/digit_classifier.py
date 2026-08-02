@@ -12,7 +12,7 @@ class Solution(nn.Module):
             nn.ReLU(),
             nn.Dropout(0.2),
             nn.Linear(512, 10),
-            nn.Sigmoid()
+            nn.Sigmoid(),
         )
 
     def forward(self, images: TensorType[float]) -> TensorType[float]:
